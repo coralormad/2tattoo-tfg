@@ -1,0 +1,10 @@
+# Credenciales locales
+app/config/config.local.php
+
+# Editor y sistema
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

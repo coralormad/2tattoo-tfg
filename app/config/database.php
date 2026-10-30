@@ -3,14 +3,21 @@
 
 declare(strict_types=1);
 
-$host = '127.0.0.1';
-$port = '3308';
-$dbname = 'tfg_tattoo';
-$username = 'tfg_user';
-$password = '1234';
-$charset = 'utf8mb4';
+$config = [
+    'host'     => getenv('DB_HOST') ?: '127.0.0.1',
+    'port'     => getenv('DB_PORT') ?: '3306',
+    'name'     => getenv('DB_NAME') ?: 'tfg_tattoo',
+    'user'     => getenv('DB_USER') ?: '',
+    'password' => getenv('DB_PASSWORD') ?: '',
+];
 
-$dsn = "mysql:host={$host};port={$port};dbname={$dbname};charset={$charset}";
+$configLocal = __DIR__ . '/config.local.php';
+
+if (is_file($configLocal)) {
+    $config = array_merge($config, require $configLocal);
+}
+
+$dsn = "mysql:host={$config['host']};port={$config['port']};dbname={$config['name']};charset=utf8mb4";
 
 $options = [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -19,7 +26,11 @@ $options = [
 ];
 
 try {
-    $pdo = new PDO($dsn, $username, $password, $options);
+    $pdo = new PDO($dsn, $config['user'], $config['password'], $options);
 } catch (PDOException $exception) {
-    exit('Error de conexión a la base de datos: ' . $exception->getMessage());
+    error_log('Error de conexión a la base de datos: ' . $exception->getMessage());
+    http_response_code(503);
+    exit('El servicio no está disponible en este momento. Inténtalo más tarde.');
 }
+
+unset($config, $configLocal, $dsn, $options);
