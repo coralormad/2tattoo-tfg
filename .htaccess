@@ -1,0 +1,15 @@
+# .htaccess (raíz) — 2Tattoo
+
+# Sin listado de carpetas
+Options -Indexes
+DirectoryIndex index.php
+
+# Bloquear archivos y carpetas ocultos (.git, .gitignore, .vscode, .htaccess)
+RedirectMatch 404 /\.(?!well-known)
+
+# Cabeceras de seguridad
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
