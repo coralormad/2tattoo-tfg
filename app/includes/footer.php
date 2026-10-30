@@ -6,6 +6,6 @@
         <p>&copy; <?php echo date('Y'); ?> 2Tattoo. Todos los derechos reservados.</p>
     </div>
 </footer>
-<script src="/tfg-tattoo/public/assets/js/main.js"></script>
+<script src="<?php echo e(assetPath('/public/assets/js/main.js')); ?>"></script>
 </body>
 </html>

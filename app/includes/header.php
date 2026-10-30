@@ -7,6 +7,16 @@ require_once __DIR__ . '/auth.php';
 
 $pageTitle = $pageTitle ?? '2Tattoo';
 
+if (!function_exists('assetPath')) {
+    function assetPath(string $path): string
+    {
+        $archivo = __DIR__ . '/../..' . $path;
+        $version = is_file($archivo) ? (string) filemtime($archivo) : '1';
+
+        return appPath($path) . '?v=' . $version;
+    }
+}
+
 $usuario = getCurrentUser();
 $estaLogueado = isLoggedIn();
 $rolUsuario = is_array($usuario) ? (string) ($usuario['rol'] ?? '') : '';
@@ -59,7 +69,7 @@ if (!function_exists('ariaCurrent')) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo e((string) $pageTitle); ?> |  2Tattoo</title>
-    <link rel="stylesheet" href="/tfg-tattoo/public/assets/css/style.css?v=<?php echo time(); ?>"></head>
+    <link rel="stylesheet" href="<?php echo e(assetPath('/public/assets/css/style.css')); ?>"></head>
 <body>
     <header class="site-header">
         <div class="header-container">
